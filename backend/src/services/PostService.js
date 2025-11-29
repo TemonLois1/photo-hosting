@@ -31,7 +31,7 @@ class PostService {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'profileImage']
         },
         {
           model: Tag,
@@ -72,7 +72,7 @@ class PostService {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'profileImage']
         }
       ],
       order,
@@ -105,7 +105,7 @@ class PostService {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'profileImage']
         }
       ],
       order: [['createdAt', 'DESC']],

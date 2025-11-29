@@ -23,7 +23,7 @@ class CommentService {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'profileImage']
         }
       ]
     });
@@ -42,7 +42,7 @@ class CommentService {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'profileImage']
         }
       ],
       order: [['createdAt', 'ASC']], // Oldest first usually for comments
