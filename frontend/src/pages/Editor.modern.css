@@ -1,7 +1,7 @@
 /* Modern Editor Page Styles */
 
 .editor-page {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height));
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;

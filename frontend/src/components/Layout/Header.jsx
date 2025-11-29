@@ -65,6 +65,12 @@ function Header() {
 
         {/* Actions */}
         <div className="header-actions">
+          <button className="auth-btn signin-btn" onClick={closeMobileMenu}>
+            Вход
+          </button>
+          <button className="auth-btn signup-btn" onClick={closeMobileMenu}>
+            Регистрация
+          </button>
           <Link 
             to="/editor" 
             className="header-action-btn editor-btn"

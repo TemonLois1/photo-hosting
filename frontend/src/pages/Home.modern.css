@@ -1,7 +1,7 @@
 /* Modern Home Page Styles */
 
 .home-page {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height));
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
@@ -83,7 +83,7 @@
 
 /* Gallery Section */
 .gallery-section {
-  max-width: 1400px;
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--space-4);
