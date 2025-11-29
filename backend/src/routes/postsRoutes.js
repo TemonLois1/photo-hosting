@@ -2,6 +2,7 @@
 
 const express = require('express');
 const { authMiddleware, optionalAuth } = require('../middleware/authMiddleware');
+const postController = require('../controllers/PostController');
 
 const router = express.Router();
 
@@ -10,40 +11,21 @@ const router = express.Router();
  * @desc    Получить ленту постов с пагинацией
  * @access  Public
  */
-router.get('/', optionalAuth, async (req, res) => {
-  // TODO: Реализовать получение ленты
-  res.status(200).json({
-    success: true,
-    message: 'Получение ленты постов - функция в разработке',
-    data: []
-  });
-});
+router.get('/', optionalAuth, postController.getFeed);
 
 /**
  * @route   GET /api/posts/:id
  * @desc    Получить конкретный пост
  * @access  Public
  */
-router.get('/:id', optionalAuth, async (req, res) => {
-  // TODO: Реализовать получение поста
-  res.status(200).json({
-    success: true,
-    message: 'Получение поста - функция в разработке'
-  });
-});
+router.get('/:id', optionalAuth, postController.getPost);
 
 /**
  * @route   POST /api/posts
  * @desc    Создать новый пост
  * @access  Private
  */
-router.post('/', authMiddleware, async (req, res) => {
-  // TODO: Реализовать создание поста
-  res.status(201).json({
-    success: true,
-    message: 'Создание поста - функция в разработке'
-  });
-});
+router.post('/', authMiddleware, postController.createPost);
 
 /**
  * @route   PUT /api/posts/:id
@@ -63,10 +45,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
  * @desc    Удалить пост
  * @access  Private
  */
-router.delete('/:id', authMiddleware, async (req, res) => {
-  // TODO: Реализовать удаление поста
-  res.status(204).send();
-});
+router.delete('/:id', authMiddleware, postController.deletePost);
 
 /**
  * @route   POST /api/posts/:id/upvote
