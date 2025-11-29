@@ -2,11 +2,12 @@
 
 .collections-page {
   min-height: calc(100vh - var(--header-height));
-  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
   padding: var(--space-8) var(--space-4);
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 }
 
 .collections-container {
@@ -29,10 +30,7 @@
 .collections-title {
   font-size: var(--text-3xl);
   font-weight: var(--font-weight-bold);
-  background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-600);
 }
 
 .collections-actions {
@@ -203,7 +201,7 @@
 .collection-name {
   font-size: var(--text-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+  color: var(--gray-900);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -213,7 +211,7 @@
 
 .collection-description {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--gray-600);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -244,7 +242,7 @@
 
 .stat-label {
   font-size: var(--text-xs);
-  color: var(--color-text-secondary);
+  color: var(--gray-600);
   text-transform: uppercase;
   font-weight: var(--font-weight-semibold);
   margin-top: var(--space-1);
@@ -269,7 +267,7 @@
   transition: all var(--transition-fast);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  color: var(--gray-700);
 }
 
 .collection-action-btn:hover {

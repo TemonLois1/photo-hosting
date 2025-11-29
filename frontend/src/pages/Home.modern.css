@@ -2,10 +2,11 @@
 
 .home-page {
   min-height: calc(100vh - var(--header-height));
-  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: hidden;
 }
 
 /* ========== HERO SECTION ========== */
@@ -62,16 +63,18 @@
   color: white;
   line-height: 1.2;
   letter-spacing: -1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .hero-subtitle {
   font-size: clamp(0.95rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.98);
   margin-bottom: 30px;
   line-height: 1.6;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .hero-cta-btn {
@@ -125,8 +128,9 @@
 .gallery-title {
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: var(--gray-900);
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .filter-buttons {
@@ -287,7 +291,7 @@
 .card-title {
   font-size: 1rem;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+  color: var(--gray-900);
   margin-bottom: 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -298,7 +302,7 @@
 
 .card-author {
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
+  color: var(--gray-600);
   margin-bottom: 12px;
 }
 
@@ -340,12 +344,12 @@
 .empty-gallery h3 {
   font-size: 1.5rem;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+  color: var(--gray-900);
   margin-bottom: 10px;
 }
 
 .empty-gallery p {
-  color: var(--color-text-secondary);
+  color: var(--gray-600);
   margin-bottom: 30px;
   line-height: 1.6;
 }
@@ -387,7 +391,7 @@
 }
 
 .loading-spinner p {
-  color: var(--color-text-secondary);
+  color: var(--gray-600);
   font-weight: var(--font-weight-medium);
 }
 
