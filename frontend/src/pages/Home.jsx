@@ -2,26 +2,44 @@
 
 import React, { useState, useEffect } from 'react';
 import './Home.modern.css';
+import { api } from '../utils/api';
 
 function Home() {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('popular');
+  const [error, setError] = useState('');
+
+  const loadPosts = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await api.getPosts({
+        sort: activeFilter,
+        limit: 12,
+        offset: 0
+      });
+      setPosts(response.data || []);
+    } catch (err) {
+      console.error('Ошибка при загрузке постов:', err);
+      setError('Не удалось загрузить посты. Используются примеры данных.');
+      // Используем mock данные если произойдёт ошибка
+      setPosts(Array(12).fill(null).map((_, i) => ({
+        id: i + 1,
+        title: `Фотография ${i + 1}`,
+        author: 'Автор',
+        views: Math.floor(Math.random() * 10000),
+        likes: Math.floor(Math.random() * 5000),
+        image: `https://picsum.photos/300/300?random=${i}`,
+      })));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // TODO: Загружать посты с API
-    console.log('Загрузка постов...');
-  }, []);
-
-  // Mock data for demonstration
-  const mockPosts = Array(12).fill(null).map((_, i) => ({
-    id: i + 1,
-    title: `Фотография ${i + 1}`,
-    author: 'Автор',
-    views: Math.floor(Math.random() * 10000),
-    likes: Math.floor(Math.random() * 5000),
-    image: `https://picsum.photos/300/300?random=${i}`,
-  }));
+    loadPosts();
+  }, [activeFilter]);
 
   return (
     <div className="home-page">
@@ -80,7 +98,19 @@ function Home() {
             <div className="spinner"></div>
             <p>Загрузка фотографий...</p>
           </div>
-        ) : mockPosts.length === 0 ? (
+        ) : error && posts.length === 0 ? (
+          <div className="empty-gallery">
+            <div className="empty-icon">⚠️</div>
+            <h3>{error}</h3>
+            <p>Попробуйте перезагрузить страницу</p>
+            <button 
+              className="empty-cta-btn"
+              onClick={() => loadPosts()}
+            >
+              Повторить
+            </button>
+          </div>
+        ) : posts.length === 0 ? (
           <div className="empty-gallery">
             <div className="empty-icon">🖼️</div>
             <h3>Нет фотографий</h3>
@@ -91,11 +121,11 @@ function Home() {
           </div>
         ) : (
           <div className="gallery-grid">
-            {mockPosts.map((post) => (
+            {posts.map((post) => (
               <article key={post.id} className="gallery-card">
                 <div className="card-image-container">
                   <img 
-                    src={post.image} 
+                    src={post.image || `https://picsum.photos/300/300?random=${post.id}`} 
                     alt={post.title}
                     className="card-image"
                   />
@@ -103,11 +133,11 @@ function Home() {
                     <div className="overlay-stats">
                       <div className="stat">
                         <span className="stat-icon">👁️</span>
-                        <span className="stat-value">{post.views.toLocaleString()}</span>
+                        <span className="stat-value">{(post.views || 0).toLocaleString()}</span>
                       </div>
                       <div className="stat">
                         <span className="stat-icon">❤️</span>
-                        <span className="stat-value">{post.likes.toLocaleString()}</span>
+                        <span className="stat-value">{(post.likes || 0).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>

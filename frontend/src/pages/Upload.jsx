@@ -1,12 +1,15 @@
 // src/pages/Upload.jsx
 import React, { useState, useRef } from 'react';
 import './Upload.modern.css';
+import { api } from '../utils/api';
 
 function Upload() {
   const [files, setFiles] = useState([]);
   const [dragOver, setDragOver] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({});
   const [uploadStage, setUploadStage] = useState('select'); // select, details, uploading
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
   
   const [details, setDetails] = useState({
@@ -88,32 +91,64 @@ function Upload() {
     }));
   };
 
-  const simulateUpload = () => {
-    setUploadStage('uploading');
-    
-    files.forEach(file => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 30;
-        if (progress > 100) progress = 100;
-        
-        setUploadProgress(prev => ({
-          ...prev,
-          [file.id]: progress
-        }));
+  const handleUpload = async () => {
+    if (!files.length) {
+      setError('Выберите хотя бы одну фотографию');
+      return;
+    }
 
-        if (progress >= 100) {
-          clearInterval(interval);
+    if (!details.title.trim()) {
+      setError('Введите название фотографии');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+    setUploadStage('uploading');
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const fileObj = files[i];
+        const formData = new FormData();
+        formData.append('image', fileObj.file);
+        formData.append('title', `${details.title} ${i + 1}` || fileObj.file.name);
+        formData.append('description', details.description);
+        formData.append('tags', JSON.stringify(details.tags));
+        formData.append('isPublic', details.isPublic);
+
+        try {
+          await api.uploadImage(formData);
+          
+          setUploadProgress(prev => ({
+            ...prev,
+            [fileObj.id]: 100
+          }));
+
           setFiles(prev => prev.map(f => 
-            f.id === file.id ? { ...f, status: 'success' } : f
+            f.id === fileObj.id ? { ...f, status: 'success' } : f
+          ));
+        } catch (error) {
+          console.error(`Ошибка при загрузке файла ${i + 1}:`, error);
+          setUploadProgress(prev => ({
+            ...prev,
+            [fileObj.id]: 0
+          }));
+
+          setFiles(prev => prev.map(f => 
+            f.id === fileObj.id ? { ...f, status: 'error' } : f
           ));
         }
-      }, 500);
-    });
+      }
 
-    setTimeout(() => {
-      setUploadStage('success');
-    }, 3000);
+      setTimeout(() => {
+        setUploadStage('success');
+      }, 1000);
+    } catch (err) {
+      setError('Ошибка при загрузке: ' + (err.message || 'Неизвестная ошибка'));
+      setUploadStage('details');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const resetUpload = () => {
@@ -122,6 +157,7 @@ function Upload() {
     setUploadStage('select');
     setDetails({ title: '', description: '', tags: [], isPublic: true });
     setNewTag('');
+    setError('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -322,11 +358,18 @@ function Upload() {
               </button>
               <button
                 className="upload-btn upload-btn-primary"
-                onClick={simulateUpload}
+                onClick={handleUpload}
+                disabled={isLoading}
               >
-                Загрузить ({files.length})
+                {isLoading ? 'Загрузка...' : `Загрузить (${files.length})`}
               </button>
             </div>
+
+            {error && (
+              <div className="error-message">
+                ⚠️ {error}
+              </div>
+            )}
           </div>
         </div>
       )}
