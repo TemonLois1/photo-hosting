@@ -19,7 +19,8 @@ function Home() {
         limit: 12,
         offset: 0
       });
-      setPosts(response.data || []);
+      // Backend returns { success: true, data: [...] }
+      setPosts(response.data.data || []);
     } catch (err) {
       console.error('Ошибка при загрузке постов:', err);
       setError('Не удалось загрузить посты. Используются примеры данных.');

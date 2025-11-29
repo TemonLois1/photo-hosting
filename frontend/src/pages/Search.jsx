@@ -21,7 +21,8 @@ function Search() {
         sort: sortBy,
         limit: 20
       });
-      setResults(response.data || []);
+      // Backend returns { success: true, data: [...] }
+      setResults(response.data.data || []);
     } catch (err) {
       console.error('Ошибка при поиске:', err);
       setResults(Array(6).fill(null).map((_, i) => ({

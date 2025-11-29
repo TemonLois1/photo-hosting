@@ -24,7 +24,13 @@ function Profile() {
         }
   
         const response = await api.getUserProfile(username);
-        const userData = response.data;
+        // Backend returns { success: true, data: { ... } }
+        const userData = response.data.data;
+        
+        if (!userData) {
+          throw new Error('Данные профиля отсутствуют');
+        }
+        
         setProfile(userData);
         
         // Проверяем, собственный ли это профиль
