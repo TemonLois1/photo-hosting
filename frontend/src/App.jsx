@@ -11,24 +11,34 @@ import Search from './pages/Search';
 import Collections from './pages/Collections';
 import Editor from './pages/Editor';
 import NotFound from './pages/NotFound';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import PrivateRoute from './components/PrivateRoute';
 
 import './styles/index.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/upload" element={<Upload />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/search" element={<Search />} />
           <Route path="/collections" element={<Collections />} />
-          <Route path="/editor" element={<Editor />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
+          
+          <Route element={<PrivateRoute />}>
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/editor" element={<Editor />} />
+          </Route>
+        </Route>
+        
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 }

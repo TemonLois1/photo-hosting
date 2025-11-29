@@ -28,12 +28,38 @@ apiClient.interceptors.request.use(
 // Interceptor для обработки ошибок
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      // Токен истёк - удаляем его
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('refreshToken');
-      window.location.href = '/';
+      // Проверим есть ли refresh token
+      const refreshToken = localStorage.getItem('refreshToken');
+      const originalRequest = error.config;
+
+      // Если это попытка refresh - не пытаемся еще раз
+      if (originalRequest.url === '/auth/refresh' || !refreshToken) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('currentUser');
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
+
+      // Пытаемся обновить токен
+      try {
+        const refreshResponse = await apiClient.post('/auth/refresh', { refreshToken });
+        const newAccessToken = refreshResponse.data.data.accessToken;
+        
+        localStorage.setItem('authToken', newAccessToken);
+        
+        // Повторяем оригинальный запрос с новым токеном
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('currentUser');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
     }
     return Promise.reject(error);
   }

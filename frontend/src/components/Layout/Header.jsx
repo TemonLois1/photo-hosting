@@ -1,11 +1,27 @@
 // src/components/Layout/Header.jsx - Компонент Header
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.modern.css';
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const user = localStorage.getItem('currentUser');
+    setIsAuthenticated(!!token);
+    if (user) {
+      try {
+        setCurrentUser(JSON.parse(user));
+      } catch (e) {
+        setCurrentUser(null);
+      }
+    }
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -13,6 +29,26 @@ function Header() {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('currentUser');
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    closeMobileMenu();
+    navigate('/');
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+    closeMobileMenu();
+  };
+
+  const handleRegisterClick = () => {
+    navigate('/register');
+    closeMobileMenu();
   };
 
   return (
@@ -40,9 +76,11 @@ function Header() {
           <Link to="/" className="nav-link" onClick={closeMobileMenu}>
             Главная
           </Link>
-          <Link to="/upload" className="nav-link" onClick={closeMobileMenu}>
-            Загрузить
-          </Link>
+          {isAuthenticated && (
+            <Link to="/upload" className="nav-link" onClick={closeMobileMenu}>
+              Загрузить
+            </Link>
+          )}
           <Link to="/search" className="nav-link" onClick={closeMobileMenu}>
             Поиск
           </Link>
@@ -65,28 +103,47 @@ function Header() {
 
         {/* Actions */}
         <div className="header-actions">
-          <button className="auth-btn signin-btn" onClick={closeMobileMenu}>
-            Вход
-          </button>
-          <button className="auth-btn signup-btn" onClick={closeMobileMenu}>
-            Регистрация
-          </button>
-          <Link 
-            to="/editor" 
-            className="header-action-btn editor-btn"
-            title="Редактор"
-            onClick={closeMobileMenu}
-          >
-            ✏️
-          </Link>
-          <Link 
-            to="/user/profile" 
-            className="header-action-btn profile-btn"
-            title="Профиль"
-            onClick={closeMobileMenu}
-          >
-            👤
-          </Link>
+          {isAuthenticated && currentUser ? (
+            <>
+              <Link 
+                to="/editor" 
+                className="header-action-btn editor-btn"
+                title="Редактор"
+                onClick={closeMobileMenu}
+              >
+                ✏️
+              </Link>
+              <Link 
+                to={`/user/${currentUser.username}`}
+                className="header-action-btn profile-btn"
+                title="Профиль"
+                onClick={closeMobileMenu}
+              >
+                👤
+              </Link>
+              <button 
+                className="auth-btn logout-btn"
+                onClick={handleLogout}
+              >
+                Выход
+              </button>
+            </>
+          ) : (
+            <>
+              <button 
+                className="auth-btn signin-btn"
+                onClick={handleLoginClick}
+              >
+                Вход
+              </button>
+              <button 
+                className="auth-btn signup-btn"
+                onClick={handleRegisterClick}
+              >
+                Регистрация
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

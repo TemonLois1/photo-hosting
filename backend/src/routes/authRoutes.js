@@ -1,6 +1,7 @@
 // src/routes/authRoutes.js - Маршруты аутентификации
 
 const express = require('express');
+const AuthController = require('../controllers/AuthController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -10,51 +11,27 @@ const router = express.Router();
  * @desc    Регистрация нового пользователя
  * @access  Public
  */
-router.post('/register', async (req, res) => {
-  // TODO: Реализовать регистрацию
-  res.status(201).json({
-    success: true,
-    message: 'Регистрация - функция в разработке'
-  });
-});
+router.post('/register', AuthController.register);
 
 /**
  * @route   POST /api/auth/login
  * @desc    Вход пользователя
  * @access  Public
  */
-router.post('/login', async (req, res) => {
-  // TODO: Реализовать вход
-  res.status(200).json({
-    success: true,
-    message: 'Вход - функция в разработке'
-  });
-});
+router.post('/login', AuthController.login);
 
 /**
  * @route   POST /api/auth/refresh
  * @desc    Обновление токена
  * @access  Public
  */
-router.post('/refresh', async (req, res) => {
-  // TODO: Реализовать обновление токена
-  res.status(200).json({
-    success: true,
-    message: 'Обновление токена - функция в разработке'
-  });
-});
+router.post('/refresh', AuthController.refresh);
 
 /**
  * @route   POST /api/auth/logout
  * @desc    Выход пользователя
  * @access  Private
  */
-router.post('/logout', authMiddleware, async (req, res) => {
-  // TODO: Реализовать выход
-  res.status(200).json({
-    success: true,
-    message: 'Выход - функция в разработке'
-  });
-});
+router.post('/logout', authMiddleware, AuthController.logout);
 
 module.exports = router;
