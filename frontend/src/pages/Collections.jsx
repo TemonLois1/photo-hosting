@@ -11,7 +11,12 @@ function Collections() {
       itemsCount: 45,
       views: 1234,
       likes: 567,
-      images: ['https://picsum.photos/300/300?random=0', 'https://picsum.photos/300/300?random=1', 'https://picsum.photos/300/300?random=2', 'https://picsum.photos/300/300?random=3'],
+      images: [
+        'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1437719417032-8595fd9e9dc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'
+      ],
     },
     {
       id: 2,
@@ -20,7 +25,12 @@ function Collections() {
       itemsCount: 32,
       views: 892,
       likes: 423,
-      images: ['https://picsum.photos/300/300?random=4', 'https://picsum.photos/300/300?random=5', 'https://picsum.photos/300/300?random=6', 'https://picsum.photos/300/300?random=7'],
+      images: [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'
+      ],
     },
     {
       id: 3,
@@ -29,7 +39,12 @@ function Collections() {
       itemsCount: 28,
       views: 756,
       likes: 312,
-      images: ['https://picsum.photos/300/300?random=8', 'https://picsum.photos/300/300?random=9', 'https://picsum.photos/300/300?random=10', 'https://picsum.photos/300/300?random=11'],
+      images: [
+        'https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1448630360428-65456885c650?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'
+      ],
     },
   ]);
   const [viewMode, setViewMode] = useState('grid');

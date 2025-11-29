@@ -54,7 +54,20 @@ function Profile() {
           posts: Array(12).fill(null).map((_, i) => ({
             id: i + 1,
             title: `Фотография ${i + 1}`,
-            image: `https://picsum.photos/300/300?random=${i}`,
+            image: `https://images.unsplash.com/photo-${[
+              '1492691527719-9d1e07e534b4',
+              '1500462918059-b1a0cb512f1d',
+              '1506744038136-46273834b3fb',
+              '1470071459604-3b5ec3a7fe05',
+              '1441974231531-c6227db76b6e',
+              '1472214103451-9374bd1c798e',
+              '1469474968028-af50264f0d63',
+              '1433086966358-54859d0ed716',
+              '1470252649378-9c29740c9fa8',
+              '1447752875204-b2f9a3e45199',
+              '1475924156734-496f6cac6ec1',
+              '1501854140884-074cf2b2b3b6'
+            ][i % 12]}?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80`,
             views: Math.floor(Math.random() * 10000),
             likes: Math.floor(Math.random() * 5000),
           }))

@@ -35,7 +35,14 @@ function Search() {
         author: 'Автор',
         views: Math.floor(Math.random() * 10000),
         likes: Math.floor(Math.random() * 5000),
-        image: `https://picsum.photos/300/300?random=${i}`,
+        image: `https://images.unsplash.com/photo-${[
+          '1492691527719-9d1e07e534b4',
+          '1500462918059-b1a0cb512f1d',
+          '1506744038136-46273834b3fb',
+          '1470071459604-3b5ec3a7fe05',
+          '1441974231531-c6227db76b6e',
+          '1472214103451-9374bd1c798e'
+        ][i % 6]}?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80`,
         tags: ['природа', 'пейзаж', 'закат'],
       })));
     } finally {
