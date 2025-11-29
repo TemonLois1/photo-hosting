@@ -39,8 +39,8 @@ function Home() {
         <div className="hero-background"></div>
       </section>
 
-      {/* Filters Section */}
-      <section className="gallery-section">
+      {/* Gallery Section */}
+      <div className="gallery-header-wrapper">
         <div className="gallery-header">
           <h2 className="gallery-title">Популярные фотографии</h2>
           
@@ -71,8 +71,10 @@ function Home() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Gallery Grid */}
+      {/* Gallery Grid */}
+      <div className="gallery-section">
         {loading ? (
           <div className="loading-spinner">
             <div className="spinner"></div>
@@ -121,7 +123,7 @@ function Home() {
             ))}
           </div>
         )}
-      </section>
+      </div>
 
       {/* CTA Section */}
       <section className="cta-section">

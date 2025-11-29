@@ -1,4 +1,4 @@
-/* Modern Home Page - Fully Responsive Layout */
+/* Modern Home Page - Full Width Responsive Layout */
 
 .home-page {
   min-height: calc(100vh - var(--header-height));
@@ -82,12 +82,11 @@
   box-shadow: var(--shadow-xl);
 }
 
-/* ========== GALLERY SECTION ========== */
-.gallery-section {
+/* ========== GALLERY HEADER WRAPPER ========== */
+.gallery-header-wrapper {
   width: 100%;
-  padding: 40px 20px;
-  flex: 1;
-  max-width: 100%;
+  padding: 30px 20px 0 20px;
+  background-color: var(--color-background);
 }
 
 .gallery-header {
@@ -97,6 +96,7 @@
   margin-bottom: 30px;
   flex-wrap: wrap;
   gap: 20px;
+  max-width: 100%;
 }
 
 .gallery-title {
@@ -136,13 +136,20 @@
   border-color: var(--primary-600);
 }
 
+/* ========== GALLERY SECTION ========== */
+.gallery-section {
+  width: 100%;
+  padding: 0 20px 40px 20px;
+  flex: 1;
+  background-color: var(--color-background);
+}
+
 /* ========== GALLERY GRID ========== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
   width: 100%;
-  margin-bottom: 40px;
 }
 
 /* ========== GALLERY CARD ========== */
@@ -337,9 +344,9 @@
   color: white;
   text-align: center;
   padding: 60px 20px;
-  margin: 40px auto;
+  margin: 40px 20px;
   border-radius: var(--radius-xl);
-  max-width: calc(100% - 40px);
+  width: auto;
 }
 
 .cta-section h2 {
@@ -393,8 +400,12 @@
     margin-bottom: 20px;
   }
 
+  .gallery-header-wrapper {
+    padding: 20px 16px 0 16px;
+  }
+
   .gallery-section {
-    padding: 30px 16px;
+    padding: 0 16px 30px 16px;
   }
 
   .gallery-title {
@@ -402,9 +413,8 @@
   }
 
   .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
-    margin-bottom: 30px;
   }
 
   .card-content {
@@ -421,7 +431,7 @@
 
   .cta-section {
     padding: 40px 16px;
-    margin: 30px auto;
+    margin: 30px 16px;
   }
 
   .cta-section h2 {
@@ -456,8 +466,12 @@
     font-size: 0.9rem;
   }
 
+  .gallery-header-wrapper {
+    padding: 20px 12px 0 12px;
+  }
+
   .gallery-section {
-    padding: 20px 12px;
+    padding: 0 12px 20px 12px;
   }
 
   .gallery-header {
@@ -479,9 +493,8 @@
   }
 
   .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
-    margin-bottom: 20px;
   }
 
   .card-content {
@@ -511,8 +524,7 @@
 
   .cta-section {
     padding: 30px 12px;
-    margin: 20px auto;
-    max-width: calc(100% - 24px);
+    margin: 20px 12px;
   }
 
   .cta-section h2 {
