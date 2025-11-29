@@ -1,41 +1,136 @@
 // src/pages/Home.jsx - Домашняя страница / Лента
 
 import React, { useState, useEffect } from 'react';
-import './Home.css';
+import './Home.modern.css';
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('popular');
 
   useEffect(() => {
     // TODO: Загружать посты с API
     console.log('Загрузка постов...');
   }, []);
 
+  // Mock data for demonstration
+  const mockPosts = Array(12).fill(null).map((_, i) => ({
+    id: i + 1,
+    title: `Фотография ${i + 1}`,
+    author: 'Автор',
+    views: Math.floor(Math.random() * 10000),
+    likes: Math.floor(Math.random() * 5000),
+    image: `https://picsum.photos/300/300?random=${i}`,
+  }));
+
   return (
-    <div className="home-container">
-      <div className="hero">
-        <h1>🖼️ ImageHost</h1>
-        <p>Поделитесь вашими лучшими фотографиями с миром</p>
-      </div>
+    <div className="home-page">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">🖼️ ImageHost</h1>
+          <p className="hero-subtitle">
+            Поделитесь вашими лучшими фотографиями с миром
+          </p>
+          <a href="/upload" className="hero-cta-btn">
+            Загрузить фото
+          </a>
+        </div>
+        <div className="hero-background"></div>
+      </section>
 
-      <div className="filters">
-        <button className="filter-btn active">Популярные</button>
-        <button className="filter-btn">Свежие</button>
-        <button className="filter-btn">Случайные</button>
-      </div>
+      {/* Filters Section */}
+      <section className="gallery-section">
+        <div className="gallery-header">
+          <h2 className="gallery-title">Популярные фотографии</h2>
+          
+          <div className="filter-buttons">
+            <button 
+              className={`filter-btn ${activeFilter === 'popular' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('popular')}
+            >
+              ⭐ Популярные
+            </button>
+            <button 
+              className={`filter-btn ${activeFilter === 'recent' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('recent')}
+            >
+              🆕 Свежие
+            </button>
+            <button 
+              className={`filter-btn ${activeFilter === 'trending' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('trending')}
+            >
+              🔥 Трендовые
+            </button>
+            <button 
+              className={`filter-btn ${activeFilter === 'random' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('random')}
+            >
+              🎲 Случайные
+            </button>
+          </div>
+        </div>
 
-      <div className="gallery">
+        {/* Gallery Grid */}
         {loading ? (
-          <p>Загрузка...</p>
-        ) : posts.length === 0 ? (
-          <p className="no-posts">Постов не найдено. Будьте первым!</p>
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Загрузка фотографий...</p>
+          </div>
+        ) : mockPosts.length === 0 ? (
+          <div className="empty-gallery">
+            <div className="empty-icon">🖼️</div>
+            <h3>Нет фотографий</h3>
+            <p>Будьте первым, кто загрузит фотографию!</p>
+            <a href="/upload" className="empty-cta-btn">
+              Загрузить фото
+            </a>
+          </div>
         ) : (
-          <div className="image-grid">
-            {/* Будут загружаться посты */}
+          <div className="gallery-grid">
+            {mockPosts.map((post) => (
+              <article key={post.id} className="gallery-card">
+                <div className="card-image-container">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="card-image"
+                  />
+                  <div className="card-overlay">
+                    <div className="overlay-stats">
+                      <div className="stat">
+                        <span className="stat-icon">👁️</span>
+                        <span className="stat-value">{post.views.toLocaleString()}</span>
+                      </div>
+                      <div className="stat">
+                        <span className="stat-icon">❤️</span>
+                        <span className="stat-value">{post.likes.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-content">
+                  <h3 className="card-title">{post.title}</h3>
+                  <p className="card-author">Автор: {post.author}</p>
+                  <a href={`/post/${post.id}`} className="card-link">
+                    Смотреть →
+                  </a>
+                </div>
+              </article>
+            ))}
           </div>
         )}
-      </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <h2>Готовы поделиться своей фотографией?</h2>
+        <p>Загрузите свою первую фото прямо сейчас</p>
+        <a href="/upload" className="cta-button">
+          Начать загрузку
+        </a>
+      </section>
     </div>
   );
 }
