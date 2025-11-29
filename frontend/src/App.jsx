@@ -12,7 +12,7 @@ import Collections from './pages/Collections';
 import Editor from './pages/Editor';
 import NotFound from './pages/NotFound';
 
-import './styles/globals.css';
+import './styles/index.css';
 
 function App() {
   return (

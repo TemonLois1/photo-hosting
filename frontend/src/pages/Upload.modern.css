@@ -1,0 +1,497 @@
+/* Modern Upload Page Styles */
+
+.upload-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+  padding: var(--space-8) var(--space-4);
+}
+
+.upload-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.upload-header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.upload-page-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-bold);
+  background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-2);
+}
+
+.upload-page-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-lg);
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ========== DRAG & DROP ZONE ========== */
+
+.upload-drop-zone {
+  border: 3px dashed var(--primary-300);
+  border-radius: var(--radius-xl);
+  padding: var(--space-12);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(236, 72, 153, 0.05));
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-drop-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(14, 165, 233, 0.1), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.upload-drop-zone:hover {
+  border-color: var(--primary-500);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(236, 72, 153, 0.1));
+  box-shadow: var(--shadow-lg);
+}
+
+.upload-drop-zone.drag-over {
+  border-color: var(--accent-500);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(236, 72, 153, 0.15));
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
+}
+
+.upload-drop-zone.drag-over::before {
+  opacity: 1;
+}
+
+.drop-zone-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  color: var(--primary-500);
+  animation: float 3s ease-in-out infinite;
+}
+
+.drop-zone-text {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.drop-zone-subtext {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.drop-zone-input {
+  display: none;
+}
+
+/* ========== IMAGE PREVIEW ========== */
+
+.image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-background-secondary);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.preview-item:hover {
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.preview-item:hover .preview-image {
+  transform: scale(1.05);
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.preview-item:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-size: var(--text-lg);
+}
+
+.preview-action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+.preview-action-btn.danger:hover {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+.preview-status {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-2);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.preview-status.success {
+  background: rgba(34, 197, 94, 0.8);
+}
+
+.preview-status.error {
+  background: rgba(239, 68, 68, 0.8);
+}
+
+/* ========== PROGRESS SECTION ========== */
+
+.upload-progress-section {
+  padding: var(--space-6);
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.progress-item {
+  margin-bottom: var(--space-6);
+}
+
+.progress-item:last-child {
+  margin-bottom: 0;
+}
+
+.progress-filename {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ========== UPLOAD DETAILS FORM ========== */
+
+.upload-details-section {
+  padding: var(--space-6);
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.upload-details-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.form-row.full {
+  grid-template-columns: 1fr;
+}
+
+.tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background);
+  min-height: 40px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+  font-size: var(--text-base);
+  transition: transform var(--transition-fast);
+}
+
+.tag-remove:hover {
+  transform: scale(1.2);
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 100px;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* ========== ACTION BUTTONS ========== */
+
+.upload-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: flex-end;
+  margin-top: var(--space-6);
+}
+
+.upload-btn-primary {
+  padding: var(--space-3) var(--space-8);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.upload-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-btn-secondary {
+  padding: var(--space-3) var(--space-8);
+  background-color: transparent;
+  color: var(--primary-600);
+  border: 2px solid var(--primary-300);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.upload-btn-secondary:hover {
+  border-color: var(--primary-500);
+  background-color: var(--primary-50);
+}
+
+/* ========== SUCCESS STATE ========== */
+
+.upload-success-message {
+  padding: var(--space-4) var(--space-6);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-left: 4px solid var(--success-500);
+  border-radius: var(--radius-md);
+  color: var(--success-700);
+  margin-bottom: var(--space-6);
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 1024px) {
+  .upload-page {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .upload-page-title {
+    font-size: var(--text-3xl);
+  }
+
+  .drop-zone-icon {
+    font-size: 3rem;
+  }
+
+  .image-preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-page {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .upload-container {
+    max-width: 100%;
+  }
+
+  .upload-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .upload-page-title {
+    font-size: var(--text-2xl);
+  }
+
+  .upload-page-subtitle {
+    font-size: var(--text-base);
+  }
+
+  .upload-drop-zone {
+    padding: var(--space-8);
+  }
+
+  .drop-zone-icon {
+    font-size: 2.5rem;
+  }
+
+  .image-preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--space-2);
+  }
+
+  .upload-details-section,
+  .upload-progress-section {
+    padding: var(--space-4);
+  }
+
+  .upload-actions {
+    flex-direction: column-reverse;
+  }
+
+  .upload-btn-primary,
+  .upload-btn-secondary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 512px) {
+  .upload-drop-zone {
+    padding: var(--space-6);
+  }
+
+  .drop-zone-icon {
+    font-size: 2rem;
+  }
+
+  .drop-zone-text {
+    font-size: var(--text-base);
+  }
+
+  .image-preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--space-2);
+  }
+
+  .preview-item {
+    border-radius: var(--radius-md);
+  }
+
+  .upload-details-section,
+  .upload-progress-section {
+    padding: var(--space-3);
+  }
+
+  .upload-details-title {
+    font-size: var(--text-base);
+  }
+
+  .progress-filename,
+  .upload-filename {
+    font-size: var(--text-xs);
+  }
+}

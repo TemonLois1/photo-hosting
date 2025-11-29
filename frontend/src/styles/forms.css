@@ -1,0 +1,249 @@
+/* Modern Forms and Upload Styles */
+
+/* ========== FORM GROUPS ========== */
+
+.form-group {
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--danger-500);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: var(--font-family-sans);
+}
+
+.form-error {
+  color: var(--danger-500);
+  font-size: var(--text-xs);
+  margin-top: var(--space-1);
+}
+
+.form-hint {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  margin-top: var(--space-1);
+}
+
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+  border-color: var(--danger-500);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+/* ========== CHECKBOX & RADIO ========== */
+
+.form-checkbox,
+.form-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  margin-bottom: var(--space-3);
+}
+
+.form-checkbox input[type='checkbox'],
+.form-radio input[type='radio'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-600);
+}
+
+.form-checkbox label,
+.form-radio label {
+  cursor: pointer;
+  margin: 0;
+}
+
+/* ========== FILE UPLOAD ========== */
+
+.upload-area {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  text-align: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  background-color: var(--color-background-secondary);
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+  border-color: var(--primary-500);
+  background-color: var(--primary-50);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+}
+
+.upload-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.upload-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+
+.upload-input {
+  display: none;
+}
+
+/* ========== PROGRESS BAR ========== */
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+  width: 0%;
+  transition: width var(--transition-base);
+  border-radius: var(--radius-full);
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-2);
+}
+
+/* ========== FIELD ARRAY (Dynamic Fields) ========== */
+
+.field-array {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field-array-item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4);
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.field-array-input {
+  flex: 1;
+}
+
+.field-array-remove {
+  padding: var(--space-2);
+  background: none;
+  border: none;
+  color: var(--danger-500);
+  cursor: pointer;
+  font-size: var(--text-lg);
+  transition: all var(--transition-fast);
+}
+
+.field-array-remove:hover {
+  transform: scale(1.2);
+}
+
+.field-array-add {
+  margin-top: var(--space-4);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .upload-area {
+    padding: var(--space-6);
+  }
+
+  .upload-icon {
+    font-size: 2rem;
+  }
+
+  .upload-title {
+    font-size: var(--text-base);
+  }
+
+  .field-array-item {
+    flex-direction: column;
+    padding: var(--space-3);
+  }
+
+  .field-array-input {
+    width: 100%;
+  }
+
+  .field-array-remove {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 512px) {
+  .upload-area {
+    padding: var(--space-4);
+  }
+
+  .upload-icon {
+    font-size: 1.5rem;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+}
