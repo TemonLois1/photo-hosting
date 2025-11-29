@@ -4,10 +4,14 @@
   min-height: 100vh;
   background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
   padding: var(--space-8) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile-container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
 }
 
