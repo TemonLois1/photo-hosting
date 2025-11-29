@@ -20,7 +20,8 @@ function Home() {
         offset: 0
       });
       // Backend returns { success: true, data: [...] }
-      setPosts(response.data.data || []);
+      const postsData = response.data.data;
+      setPosts(Array.isArray(postsData) ? postsData : []);
     } catch (err) {
       console.error('Ошибка при загрузке постов:', err);
       setError('Не удалось загрузить посты. Используются примеры данных.');

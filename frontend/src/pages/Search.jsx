@@ -21,8 +21,11 @@ function Search() {
         sort: sortBy,
         limit: 20
       });
-      // Backend returns { success: true, data: [...] }
-      setResults(response.data.data || []);
+      // Backend returns { success: true, data: { posts: [], users: [], tags: [] } }
+      // We need to extract the array based on the filter or just combine them
+      const searchData = response.data.data;
+      const resultsList = Array.isArray(searchData) ? searchData : (searchData.posts || []);
+      setResults(resultsList);
     } catch (err) {
       console.error('Ошибка при поиске:', err);
       setResults(Array(6).fill(null).map((_, i) => ({
