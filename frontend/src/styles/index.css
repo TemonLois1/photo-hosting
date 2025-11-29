@@ -11,6 +11,7 @@
 
 /* Import Layout Styles */
 @import '../components/Layout/Header.modern.css';
+@import '../components/Layout/Footer.modern.css';
 
 /* Import Page Styles */
 @import '../pages/Home.modern.css';
