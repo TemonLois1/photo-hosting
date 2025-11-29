@@ -29,6 +29,12 @@ const searchRoutes = require('./routes/searchRoutes');
 
 const app = express();
 
+// ========== TRUST PROXY FOR PRODUCTION ==========
+// Required for Render.com and other reverse proxies
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // ========== SECURITY & PERFORMANCE MIDDLEWARE ==========
 
 // Helmet для безопасности HTTP заголовков
@@ -54,13 +60,17 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
   max: 100, // 100 запросов на IP
-  message: 'Слишком много запросов с этого IP, пожалуйста попробуйте позже.'
+  message: 'Слишком много запросов с этого IP, пожалуйста попробуйте позже.',
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 час
   max: 50, // 50 загрузок в час
-  skipSuccessfulRequests: true
+  skipSuccessfulRequests: true,
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 app.use('/api/', limiter);
@@ -105,6 +115,20 @@ app.use('/api/albums', albumsRoutes);
 
 // Поиск
 app.use('/api/search', searchRoutes);
+
+// ========== SERVE STATIC FRONTEND FILES ==========
+
+// Serve React static files from frontend/build directory
+const path = require('path');
+const frontendBuildPath = path.join(__dirname, '../../frontend/build');
+
+// Serve static files
+app.use(express.static(frontendBuildPath));
+
+// Fallback to React app for client-side routing
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendBuildPath, 'index.html'));
+});
 
 // ========== 404 HANDLER ==========
 
