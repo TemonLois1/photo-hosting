@@ -26,22 +26,16 @@
 - **Статус:** ✅ Готово для использования
 
 #### 3. Остальные Services
+
+**PostService (ГОТОВ ✅)**
+- **Файл:** `backend/src/services/PostService.js`
+- **Статус:** ✅ Реализован
+
+**CommentService (ГОТОВ ✅)**
+- **Файл:** `backend/src/services/CommentService.js`
+- **Статус:** ✅ Реализован
+
 ```javascript
-// PostService
-- createPost(userId, postData)
-- getPost(postId)
-- getUserPosts(userId)
-- getPublicPosts(filters, pagination)
-- updatePost(postId, userId, data)
-- deletePost(postId, userId)
-- incrementViews(postId)
-
-// CommentService
-- createComment(postId, userId, text)
-- getPostComments(postId, pagination)
-- updateComment(commentId, userId, text)
-- deleteComment(commentId, userId)
-
 // VoteService
 - toggleVote(userId, postId/commentId, type)
 - getVoteCount(postId/commentId)

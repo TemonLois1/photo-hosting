@@ -2,21 +2,23 @@
 
 const express = require('express');
 const { authMiddleware, optionalAuth } = require('../middleware/authMiddleware');
+const commentController = require('../controllers/CommentController');
 
 const router = express.Router();
+
+/**
+ * @route   GET /api/comments
+ * @desc    Получить комментарии (обычно по postId)
+ * @access  Public
+ */
+router.get('/', optionalAuth, commentController.getPostComments);
 
 /**
  * @route   POST /api/comments
  * @desc    Создать комментарий
  * @access  Private
  */
-router.post('/', authMiddleware, async (req, res) => {
-  // TODO: Реализовать создание комментария
-  res.status(201).json({
-    success: true,
-    message: 'Создание комментария - функция в разработке'
-  });
-});
+router.post('/', authMiddleware, commentController.createComment);
 
 /**
  * @route   PUT /api/comments/:id
@@ -36,9 +38,6 @@ router.put('/:id', authMiddleware, async (req, res) => {
  * @desc    Удалить комментарий
  * @access  Private
  */
-router.delete('/:id', authMiddleware, async (req, res) => {
-  // TODO: Реализовать удаление комментария
-  res.status(204).send();
-});
+router.delete('/:id', authMiddleware, commentController.deleteComment);
 
 module.exports = router;

@@ -3,6 +3,7 @@
 const express = require('express');
 const { authMiddleware, optionalAuth } = require('../middleware/authMiddleware');
 const postController = require('../controllers/PostController');
+const commentController = require('../controllers/CommentController');
 
 const router = express.Router();
 
@@ -19,6 +20,13 @@ router.get('/', optionalAuth, postController.getFeed);
  * @access  Public
  */
 router.get('/:id', optionalAuth, postController.getPost);
+
+/**
+ * @route   GET /api/posts/:postId/comments
+ * @desc    Получить комментарии к посту
+ * @access  Public
+ */
+router.get('/:postId/comments', optionalAuth, commentController.getPostComments);
 
 /**
  * @route   POST /api/posts
