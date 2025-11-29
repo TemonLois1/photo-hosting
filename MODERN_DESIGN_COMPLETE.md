@@ -413,3 +413,20 @@ For issues or questions about the design system:
 **Created**: November 29, 2025
 **Design System**: Modern, Professional, Responsive
 **Status**: ✅ Production Ready
+
+## ?? Update: Home & Editor Redesign (Glassmorphism)
+
+### 1. Home Page Redesign
+- **Hero Section**: Full-width immersive background image (Unsplash) with glassmorphism overlay.
+- **Gallery Cards**: Clean, borderless cards with soft shadows, lift-up hover effects, and stats overlay.
+- **Images**: Replaced placeholders with high-quality Unsplash images.
+
+### 2. Editor Page Redesign
+- **Professional Interface**: Dark/Light hybrid theme with glassmorphism panels.
+- **Tools**: Left sidebar for tools, right sidebar for adjustments/filters.
+- **Canvas**: Center canvas with zoom controls and real-time filter previews.
+
+### 3. Visual Consistency
+- **Unsplash Integration**: Updated Profile, Search, and Collections pages to use Unsplash images.
+- **Animations**: Added smooth transitions and entrance animations.
+
