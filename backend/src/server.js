@@ -13,8 +13,9 @@ const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/requestLogger');
 
 // Импорт БД
-const sequelize = require('./config/database');
-const { User, Post, Comment, Tag, Album, Vote, Follow } = require('./models');
+const { initializeDatabase, getSequelize, isDbConnected } = require('./config/database');
+let sequelize;
+let User, Post, Comment, Tag, Album, Vote, Follow;
 
 // Импорт routes
 const authRoutes = require('./routes/authRoutes');
@@ -128,22 +129,36 @@ const PORT = process.env.PORT || 5000;
 // Функция для инициализации БД и запуска сервера
 const initializeServer = async () => {
   try {
-    // Проверка подключения к БД
-    await sequelize.authenticate();
-    console.log('✅ Database connection established');
+    // Инициализация БД (без блокировки при ошибке)
+    sequelize = await initializeDatabase();
+    
+    if (sequelize) {
+      // Загружаем модели только если БД подключена
+      const models = require('./models');
+      User = models.User;
+      Post = models.Post;
+      Comment = models.Comment;
+      Tag = models.Tag;
+      Album = models.Album;
+      Vote = models.Vote;
+      Follow = models.Follow;
 
-    // Синхронизация моделей с БД
-    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
-    console.log('✅ Database models synchronized');
+      // Синхронизация моделей с БД
+      await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+      console.log('✅ Database models synchronized');
+    } else {
+      console.warn('⚠️  Proceeding without database - API will not have data persistence');
+    }
 
     // Запуск сервера
     const server = app.listen(PORT, () => {
+      const dbStatus = sequelize ? 'Connected & Synchronized' : 'Not Available';
       console.log(`
   🚀 Server is running!
   📍 Listening on port ${PORT}
   🌍 Environment: ${process.env.NODE_ENV || 'development'}
   🔗 API URL: ${process.env.API_URL || `http://localhost:${PORT}`}
-  🗄️ Database: Connected & Synchronized
+  🗄️ Database: ${dbStatus}
       `);
     });
 
@@ -152,8 +167,11 @@ const initializeServer = async () => {
     process.on('SIGTERM', async () => {
       console.log('SIGTERM signal received: closing HTTP server');
       server.close(async () => {
-        await sequelize.close();
-        console.log('HTTP server closed and database connection closed');
+        if (sequelize) {
+          await sequelize.close();
+          console.log('Database connection closed');
+        }
+        console.log('HTTP server closed');
         process.exit(0);
       });
     });
@@ -161,15 +179,18 @@ const initializeServer = async () => {
     process.on('SIGINT', async () => {
       console.log('SIGINT signal received: closing HTTP server');
       server.close(async () => {
-        await sequelize.close();
-        console.log('HTTP server closed and database connection closed');
+        if (sequelize) {
+          await sequelize.close();
+          console.log('Database connection closed');
+        }
+        console.log('HTTP server closed');
         process.exit(0);
       });
     });
 
     return server;
   } catch (error) {
-    console.error('❌ Failed to start server:', error.message);
+    console.error('❌ Unexpected error starting server:', error.message);
     process.exit(1);
   }
 };
