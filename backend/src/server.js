@@ -12,6 +12,10 @@ require('express-async-errors');
 const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/requestLogger');
 
+// Импорт БД
+const sequelize = require('./config/database');
+const { User, Post, Comment, Tag, Album, Vote, Follow } = require('./models');
+
 // Импорт routes
 const authRoutes = require('./routes/authRoutes');
 const postsRoutes = require('./routes/postsRoutes');
@@ -121,31 +125,56 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`
+// Функция для инициализации БД и запуска сервера
+const initializeServer = async () => {
+  try {
+    // Проверка подключения к БД
+    await sequelize.authenticate();
+    console.log('✅ Database connection established');
+
+    // Синхронизация моделей с БД
+    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+    console.log('✅ Database models synchronized');
+
+    // Запуск сервера
+    const server = app.listen(PORT, () => {
+      console.log(`
   🚀 Server is running!
   📍 Listening on port ${PORT}
   🌍 Environment: ${process.env.NODE_ENV || 'development'}
   🔗 API URL: ${process.env.API_URL || `http://localhost:${PORT}`}
-  `);
-});
+  🗄️ Database: Connected & Synchronized
+      `);
+    });
 
-// ========== GRACEFUL SHUTDOWN ==========
+    // ========== GRACEFUL SHUTDOWN ==========
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
-    process.exit(0);
-  });
-});
+    process.on('SIGTERM', async () => {
+      console.log('SIGTERM signal received: closing HTTP server');
+      server.close(async () => {
+        await sequelize.close();
+        console.log('HTTP server closed and database connection closed');
+        process.exit(0);
+      });
+    });
 
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
-    process.exit(0);
-  });
-});
+    process.on('SIGINT', async () => {
+      console.log('SIGINT signal received: closing HTTP server');
+      server.close(async () => {
+        await sequelize.close();
+        console.log('HTTP server closed and database connection closed');
+        process.exit(0);
+      });
+    });
+
+    return server;
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+// Инициализация и запуск сервера
+initializeServer();
 
 module.exports = app;
