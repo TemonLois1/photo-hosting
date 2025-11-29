@@ -1,6 +1,6 @@
 // src/pages/Home.jsx - Домашняя страница / Лента
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Home.modern.css';
 import { api } from '../utils/api';
 
@@ -10,7 +10,7 @@ function Home() {
   const [activeFilter, setActiveFilter] = useState('popular');
   const [error, setError] = useState('');
 
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -35,11 +35,11 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFilter]);
 
   useEffect(() => {
     loadPosts();
-  }, [activeFilter]);
+  }, [loadPosts]);
 
   return (
     <div className="home-page">

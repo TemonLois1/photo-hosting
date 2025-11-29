@@ -13,7 +13,8 @@ const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/requestLogger');
 
 // Импорт БД
-const { initializeDatabase, getSequelize, isDbConnected } = require('./config/database');
+const sequelizeInstance = require('./config/database');
+const { initializeDatabase, getSequelize, isDbConnected } = sequelizeInstance;
 let sequelize;
 let User, Post, Comment, Tag, Album, Vote, Follow;
 

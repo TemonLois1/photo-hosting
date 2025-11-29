@@ -9,8 +9,8 @@ function Editor() {
   const [blur, setBlur] = useState(0);
   const [zoom, setZoom] = useState(100);
   const [selectedTool, setSelectedTool] = useState('select');
-  const [history, setHistory] = useState(['Исходное изображение']);
-  const [layers, setLayers] = useState([
+  const [history] = useState(['Исходное изображение']);
+  const [layers] = useState([
     { id: 1, name: 'Фоновый слой', visible: true },
   ]);
 

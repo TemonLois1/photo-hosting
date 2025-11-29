@@ -3,41 +3,35 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-let sequelize = null;
+// Создаём инстанс Sequelize сразу
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'photo_hosting',
+  process.env.DB_USER || 'postgres',
+  process.env.DB_PASSWORD || 'postgres',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    pool: {
+      max: 10,
+      min: 2,
+      acquire: 30000,
+      idle: 10000,
+    },
+    retry: {
+      max: 3,
+      delay: 5000
+    }
+  }
+);
+
 let isConnected = false;
 
 const initializeDatabase = async () => {
   try {
-    sequelize = new Sequelize(
-      process.env.DB_NAME || 'photo_hosting',
-      process.env.DB_USER || 'postgres',
-      process.env.DB_PASSWORD || 'postgres',
-      {
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 5432,
-        dialect: 'postgres',
-        logging: process.env.NODE_ENV === 'development' ? console.log : false,
-        pool: {
-          max: 10,
-          min: 2,
-          acquire: 30000,
-          idle: 10000,
-        },
-        retry: {
-          max: 3,
-          delay: 5000
-        }
-      }
-    );
-
-    // Проверка подключения (с таймаутом)
-    await Promise.race([
-      sequelize.authenticate(),
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Connection timeout')), 10000)
-      )
-    ]);
-    
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: false });
     isConnected = true;
     console.log('✅ Database connected successfully');
     return sequelize;
@@ -52,4 +46,7 @@ const initializeDatabase = async () => {
 const getSequelize = () => sequelize;
 const isDbConnected = () => isConnected;
 
-module.exports = { initializeDatabase, getSequelize, isDbConnected };
+module.exports = sequelize;
+module.exports.initializeDatabase = initializeDatabase;
+module.exports.getSequelize = getSequelize;
+module.exports.isDbConnected = isDbConnected;

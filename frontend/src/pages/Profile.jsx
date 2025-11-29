@@ -13,53 +13,53 @@ function Profile() {
   const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   useEffect(() => {
+    const loadProfile = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        if (!username) {
+          setError('Пользователь не найден');
+          setLoading(false);
+          return;
+        }
+  
+        const response = await api.getUserProfile(username);
+        const userData = response.data;
+        setProfile(userData);
+        
+        // Проверяем, собственный ли это профиль
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser && JSON.parse(currentUser).username === username) {
+          setIsOwnProfile(true);
+        }
+      } catch (err) {
+        console.error('Ошибка при загрузке профиля:', err);
+        setError('Не удалось загрузить профиль. Используются примеры данных.');
+        // Mock данные для демонстрации
+        setProfile({
+          username: username || 'иван_петров',
+          name: 'Иван Петров',
+          bio: 'Фотограф и путешественник. Люблю снимать пейзажи и портреты.',
+          followers: 1234,
+          following: 567,
+          photos: 89,
+          avatar: '👤',
+          createdAt: '2024-11-15',
+          posts: Array(12).fill(null).map((_, i) => ({
+            id: i + 1,
+            title: `Фотография ${i + 1}`,
+            image: `https://picsum.photos/300/300?random=${i}`,
+            views: Math.floor(Math.random() * 10000),
+            likes: Math.floor(Math.random() * 5000),
+          }))
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadProfile();
   }, [username]);
-
-  const loadProfile = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      if (!username) {
-        setError('Пользователь не найден');
-        setLoading(false);
-        return;
-      }
-
-      const response = await api.getUserProfile(username);
-      const userData = response.data;
-      setProfile(userData);
-      
-      // Проверяем, собственный ли это профиль
-      const currentUser = localStorage.getItem('currentUser');
-      if (currentUser && JSON.parse(currentUser).username === username) {
-        setIsOwnProfile(true);
-      }
-    } catch (err) {
-      console.error('Ошибка при загрузке профиля:', err);
-      setError('Не удалось загрузить профиль. Используются примеры данных.');
-      // Mock данные для демонстрации
-      setProfile({
-        username: username || 'иван_петров',
-        name: 'Иван Петров',
-        bio: 'Фотограф и путешественник. Люблю снимать пейзажи и портреты.',
-        followers: 1234,
-        following: 567,
-        photos: 89,
-        avatar: '👤',
-        createdAt: '2024-11-15',
-        posts: Array(12).fill(null).map((_, i) => ({
-          id: i + 1,
-          title: `Фотография ${i + 1}`,
-          image: `https://picsum.photos/300/300?random=${i}`,
-          views: Math.floor(Math.random() * 10000),
-          likes: Math.floor(Math.random() * 5000),
-        }))
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
