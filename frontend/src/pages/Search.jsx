@@ -1,23 +1,55 @@
 // src/pages/Search.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Search.modern.css';
+import { api } from '../utils/api';
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [sortBy, setSortBy] = useState('relevant');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const filters = ['all', 'photos', 'users', 'tags', 'collections'];
-  const mockResults = Array(20).fill(null).map((_, i) => ({
-    id: i + 1,
-    title: `Результат поиска ${i + 1}`,
-    description: 'Описание результата поиска',
-    author: 'Автор',
-    views: Math.floor(Math.random() * 10000),
-    likes: Math.floor(Math.random() * 5000),
-    image: `https://picsum.photos/300/300?random=${i}`,
-    tags: ['природа', 'пейзаж', 'закат'],
-  }));
+
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      performSearch();
+    } else {
+      setResults([]);
+    }
+  }, [searchQuery, activeFilter, sortBy]);
+
+  const performSearch = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await api.search({
+        query: searchQuery,
+        type: activeFilter !== 'all' ? activeFilter : undefined,
+        sort: sortBy,
+        limit: 20
+      });
+      setResults(response.data || []);
+    } catch (err) {
+      console.error('Ошибка при поиске:', err);
+      setError('Ошибка при поиске. Используются примеры результатов.');
+      // Mock результаты при ошибке
+      setResults(Array(20).fill(null).map((_, i) => ({
+        id: i + 1,
+        title: `Результат поиска: ${searchQuery} ${i + 1}`,
+        description: 'Описание результата поиска',
+        author: 'Автор',
+        views: Math.floor(Math.random() * 10000),
+        likes: Math.floor(Math.random() * 5000),
+        image: `https://picsum.photos/300/300?random=${i}`,
+        tags: ['природа', 'пейзаж', 'закат'],
+      })));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -42,6 +74,7 @@ function Search() {
               placeholder="Поиск по названиям, тегам, авторам..."
               value={searchQuery}
               onChange={handleSearch}
+              autoFocus
             />
             {searchQuery && (
               <button className="search-clear" onClick={handleClear}>
@@ -68,45 +101,90 @@ function Search() {
           ))}
         </div>
 
-        {/* Results Header */}
-        <div className="search-results-header">
-          <span className="results-count">
-            Найдено результатов: {mockResults.length}
-          </span>
-          <div className="results-sort">
-            <label htmlFor="sort">Сортировать:</label>
-            <select
-              id="sort"
-              className="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="relevant">По релевантности</option>
-              <option value="popular">По популярности</option>
-              <option value="recent">По дате</option>
-              <option value="trending">Трендовые</option>
-            </select>
-          </div>
-        </div>
+        {searchQuery ? (
+          <>
+            {/* Results Header */}
+            <div className="search-results-header">
+              <span className="results-count">
+                Найдено результатов: {loading ? '...' : results.length}
+              </span>
+              <div className="results-sort">
+                <label htmlFor="sort">Сортировать:</label>
+                <select
+                  id="sort"
+                  className="sort-select"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="relevant">По релевантности</option>
+                  <option value="popular">По популярности</option>
+                  <option value="recent">По дате</option>
+                  <option value="trending">Трендовые</option>
+                </select>
+              </div>
+            </div>
 
-        {/* Results Grid */}
-        {mockResults.length > 0 ? (
-          <div className="search-results">
-            {mockResults.map(result => (
-              <article key={result.id} className="result-card">
-                <img
-                  src={result.image}
-                  alt={result.title}
-                  className="result-image"
-                />
-                <div className="result-content">
-                  <h3 className="result-title">{result.title}</h3>
-                  <div className="result-meta">
-                    <div className="result-meta-item">
-                      <span>👁️ {result.views}</span>
+            {/* Results Grid */}
+            {loading ? (
+              <div className="loading-spinner">
+                <div className="spinner"></div>
+                <p>Поиск...</p>
+              </div>
+            ) : error && results.length === 0 ? (
+              <div className="error-message" style={{ padding: '40px', textAlign: 'center' }}>
+                ⚠️ {error}
+              </div>
+            ) : results.length > 0 ? (
+              <div className="search-results">
+                {results.map(result => (
+                  <article key={result.id} className="result-card">
+                    <img
+                      src={result.image || `https://picsum.photos/300/300?random=${result.id}`}
+                      alt={result.title}
+                      className="result-image"
+                    />
+                    <div className="result-content">
+                      <h3 className="result-title">{result.title}</h3>
+                      <div className="result-meta">
+                        <div className="result-meta-item">
+                          <span>👁️ {result.views || 0}</span>
+                        </div>
+                        <div className="result-meta-item">
+                          <span>❤️ {result.likes || 0}</span>
+                        </div>
+                      </div>
+                      {result.tags && result.tags.length > 0 && (
+                        <div className="result-tags">
+                          {result.tags.map(tag => (
+                            <span key={tag} className="result-tag">{tag}</span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    <div className="result-meta-item">
-                      <span>❤️ {result.likes}</span>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="search-empty">
+                <div className="empty-icon">🔍</div>
+                <h3 className="empty-title">Результаты не найдены</h3>
+                <p className="empty-subtitle">Попробуйте другой поисковый запрос</p>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="search-empty">
+            <div className="empty-icon">🔍</div>
+            <h3 className="empty-title">Начните поиск</h3>
+            <p className="empty-subtitle">Введите название фотографии, тег или имя пользователя</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Search;
                     </div>
                   </div>
                   <div className="result-tags">
