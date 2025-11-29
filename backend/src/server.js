@@ -127,7 +127,37 @@ app.use(express.static(frontendBuildPath));
 
 // Fallback to React app for client-side routing
 app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  const indexPath = path.join(frontendBuildPath, 'index.html');
+  console.log(`📁 Serving frontend from: ${indexPath}`);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error(`❌ Failed to serve index.html: ${err.message}`);
+      res.status(404).json({ error: 'Frontend not found', path: indexPath });
+    }
+  });
+});
+
+// Serve all routes to React for client-side routing
+app.get('/*', (req, res) => {
+  // Skip API routes (already handled above)
+  if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: `Маршрут ${req.method} ${req.originalUrl} не найден`
+      }
+    });
+  }
+  
+  // All other routes serve the React app
+  const indexPath = path.join(frontendBuildPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error(`❌ Failed to serve React app for ${req.path}: ${err.message}`);
+      res.status(404).json({ error: 'Frontend not found' });
+    }
+  });
 });
 
 // ========== 404 HANDLER ==========

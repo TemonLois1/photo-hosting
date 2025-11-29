@@ -4,6 +4,7 @@ WORKDIR /app/frontend
 
 # Copy frontend files
 COPY frontend/package*.json ./
+COPY frontend/.env.production ./.env.production
 COPY frontend/public ./public
 COPY frontend/src ./src
 
