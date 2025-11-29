@@ -1,14 +1,204 @@
 // src/pages/Profile.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './Profile.modern.css';
 
 function Profile() {
   const { username } = useParams();
+  const [activeTab, setActiveTab] = useState('gallery');
+
+  const mockProfile = {
+    username: username || 'иван_петров',
+    name: 'Иван Петров',
+    bio: 'Фотограф и путешественник. Люблю снимать пейзажи и портреты.',
+    followers: 1234,
+    following: 567,
+    photos: 89,
+    avatar: '👤',
+    posts: Array(12).fill(null).map((_, i) => ({
+      id: i + 1,
+      title: `Фотография ${i + 1}`,
+      image: `https://picsum.photos/300/300?random=${i}`,
+      views: Math.floor(Math.random() * 10000),
+      likes: Math.floor(Math.random() * 5000),
+    }))
+  };
 
   return (
-    <div className="container">
-      <h1>👤 Профиль: {username}</h1>
-      <p>Профиль пользователя в разработке...</p>
+    <div className="profile-page">
+      <div className="profile-container">
+        {/* Profile Header */}
+        <div className="profile-header">
+          <div className="profile-header-content">
+            <div className="profile-avatar">{mockProfile.avatar}</div>
+            <div className="profile-info">
+              <h1 className="profile-name">{mockProfile.name}</h1>
+              <p className="profile-bio">{mockProfile.bio}</p>
+              <div className="profile-stats">
+                <div className="stat-badge">
+                  <div className="stat-number">{mockProfile.photos}</div>
+                  <div className="stat-label">Фото</div>
+                </div>
+                <div className="stat-badge">
+                  <div className="stat-number">{mockProfile.followers}</div>
+                  <div className="stat-label">Подписчиков</div>
+                </div>
+                <div className="stat-badge">
+                  <div className="stat-number">{mockProfile.following}</div>
+                  <div className="stat-label">Подписок</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="profile-actions">
+            <button className="profile-btn primary">Подписаться</button>
+            <button className="profile-btn">Сообщение</button>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="profile-tabs">
+          <button
+            className={`profile-tab ${activeTab === 'gallery' ? 'active' : ''}`}
+            onClick={() => setActiveTab('gallery')}
+          >
+            🖼️ Галерея
+          </button>
+          <button
+            className={`profile-tab ${activeTab === 'about' ? 'active' : ''}`}
+            onClick={() => setActiveTab('about')}
+          >
+            ℹ️ О профиле
+          </button>
+          <button
+            className={`profile-tab ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            ⚙️ Настройки
+          </button>
+        </div>
+
+        {/* Gallery Tab */}
+        {activeTab === 'gallery' && (
+          <div className="profile-content active">
+            <div className="profile-gallery">
+              {mockProfile.posts.map(post => (
+                <article key={post.id} className="profile-post-card">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="profile-post-image"
+                  />
+                  <div className="profile-post-overlay">
+                    <div className="overlay-stat">
+                      <span className="overlay-stat-icon">👁️</span>
+                      <span>{post.views}</span>
+                    </div>
+                    <div className="overlay-stat">
+                      <span className="overlay-stat-icon">❤️</span>
+                      <span>{post.likes}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* About Tab */}
+        {activeTab === 'about' && (
+          <div className="profile-content active">
+            <div className="profile-details">
+              <div className="detail-card">
+                <div className="detail-card-title">📋 Информация</div>
+                <div className="detail-item">
+                  <span className="detail-label">Имя пользователя</span>
+                  <span className="detail-value">@{mockProfile.username}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Полное имя</span>
+                  <span className="detail-value">{mockProfile.name}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Биография</span>
+                  <span className="detail-value">{mockProfile.bio}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Присоединился</span>
+                  <span className="detail-value">15 ноября 2024</span>
+                </div>
+              </div>
+
+              <div className="detail-card">
+                <div className="detail-card-title">📊 Статистика</div>
+                <div className="detail-item">
+                  <span className="detail-label">Всего фотографий</span>
+                  <span className="detail-value">{mockProfile.photos}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Подписчиков</span>
+                  <span className="detail-value">{mockProfile.followers}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Подписок</span>
+                  <span className="detail-value">{mockProfile.following}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Средняя оценка</span>
+                  <span className="detail-value">4.8 ⭐</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Settings Tab */}
+        {activeTab === 'settings' && (
+          <div className="profile-content active">
+            <div className="profile-settings">
+              <div className="settings-card">
+                <div className="settings-card-title">🔒 Приватность</div>
+                <div className="settings-group">
+                  <div className="settings-item">
+                    <div className="settings-label">
+                      <div className="settings-label-text">Закрытый профиль</div>
+                      <div className="settings-label-desc">Только подписчики могут видеть ваши фото</div>
+                    </div>
+                    <input type="checkbox" className="settings-toggle" />
+                  </div>
+                  <div className="settings-item">
+                    <div className="settings-label">
+                      <div className="settings-label-text">Разрешить комментарии</div>
+                      <div className="settings-label-desc">Позволить пользователям комментировать</div>
+                    </div>
+                    <input type="checkbox" className="settings-toggle" defaultChecked />
+                  </div>
+                </div>
+              </div>
+
+              <div className="settings-card">
+                <div className="settings-card-title">🔔 Уведомления</div>
+                <div className="settings-group">
+                  <div className="settings-item">
+                    <div className="settings-label">
+                      <div className="settings-label-text">Новые подписчики</div>
+                      <div className="settings-label-desc">Уведомлять о новых подписчиках</div>
+                    </div>
+                    <input type="checkbox" className="settings-toggle" defaultChecked />
+                  </div>
+                  <div className="settings-item">
+                    <div className="settings-label">
+                      <div className="settings-label-text">Лайки и комментарии</div>
+                      <div className="settings-label-desc">Уведомлять о лайках и комментариях</div>
+                    </div>
+                    <input type="checkbox" className="settings-toggle" defaultChecked />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
