@@ -106,11 +106,13 @@
   width: 100%;
   padding: 40px 20px 0 20px;
   background-color: transparent;
+  display: flex;
+  justify-content: center;
 }
 
 .gallery-header {
   max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -178,6 +180,8 @@
   padding: 0 20px 60px 20px;
   flex: 1;
   background-color: transparent;
+  display: flex;
+  justify-content: center;
 }
 
 /* ========== GALLERY GRID - RESPONSIVE MASONRY ========== */
@@ -187,8 +191,8 @@
   gap: 24px;
   width: 100%;
   max-width: 1400px;
-  margin: 0 auto;
   animation: fadeInUp 0.6s ease-out 0.2s backwards;
+  padding: 0;
 }
 
 /* ========== GALLERY CARD ========== */
