@@ -1,40 +1,26 @@
-# Build stage for backend
-FROM node:18-alpine AS backend-build
-WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN npm install
-
-# Build stage for frontend
-FROM node:18-alpine AS frontend-build
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend .
-RUN npm run build
-
 # Production stage
 FROM node:18-alpine
 WORKDIR /app
 
-# Copy backend dependencies
+# Copy backend files
 COPY backend/package*.json ./backend/
-RUN cd backend && npm install --omit=dev
+COPY backend/src ./backend/src
 
-# Copy backend source
-COPY --from=backend-build /app/backend/src ./src
+# Copy frontend files (for serving static files)
+COPY frontend/package*.json ./frontend/
+COPY frontend/public ./frontend/public
+COPY frontend/src ./frontend/src
 
-# Copy built frontend
-COPY --from=frontend-build /app/frontend/build ./public
+# Install backend dependencies only
+WORKDIR /app/backend
+RUN npm install --omit=dev
 
-# Copy config files
-COPY backend/src/config ./src/config
-COPY backend/src/middleware ./src/middleware
-COPY backend/src/routes ./src/routes
-COPY backend/src/utils ./src/utils
-
+# Expose port
 EXPOSE 5000
 
+# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
+# Start backend
 CMD ["node", "src/server.js"]
